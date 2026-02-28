@@ -87,10 +87,10 @@ function Storefront({
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#faf6f0] to-white">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-[#b89573] to-[#8f6f55] text-white py-20">
+      <section className="bg-gradient-to-r from-[#b89573] to-[#8f6f55] text-white py-14 sm:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl mb-4">Transform Your Bath Time</h2>
-          <p className="text-xl md:text-2xl text-purple-100 max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl mb-4">Transform Your Bath Time</h2>
+          <p className="text-base sm:text-xl md:text-2xl text-purple-100 max-w-2xl mx-auto">
             Discover our premium collection of handcrafted bath salts made with natural ingredients
           </p>
         </div>
@@ -99,7 +99,7 @@ function Storefront({
       {/* Specials Section */}
       <section className="container mx-auto px-4 py-12">
         <div className="mb-8">
-          <h2 className="text-3xl mb-2">Specials</h2>
+          <h2 className="text-2xl sm:text-3xl mb-2">Specials</h2>
           <p className="text-muted-foreground">Limited-time picks we are loving right now</p>
         </div>
         {isLoading ? (
@@ -127,7 +127,7 @@ function Storefront({
       {/* Products Grid */}
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8">
-          <h2 className="text-3xl mb-2">Our Collection</h2>
+          <h2 className="text-2xl sm:text-3xl mb-2">Our Collection</h2>
           <p className="text-muted-foreground">Choose from our carefully curated selection</p>
         </div>
         {isLoading ? (
@@ -250,9 +250,9 @@ interface SiteHeaderProps {
 function SiteHeader({ cartItemCount, onOpenCart, isAuthenticated, onLogout }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 bg-white/95 backdrop-blur-sm border-b z-30 shadow-sm">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <Link to="/" className="flex items-center gap-3">
-          <div className="h-12 w-12 rounded-full border border-border bg-white p-1">
+          <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-full border border-border bg-white p-1">
             <img
               src={logo}
               alt="Dimakatso Salts and Oils logo"
@@ -260,27 +260,27 @@ function SiteHeader({ cartItemCount, onOpenCart, isAuthenticated, onLogout }: Si
             />
           </div>
           <div>
-            <h1 className="text-2xl">Dimakatso</h1>
+            <h1 className="text-xl sm:text-2xl">Dimakatso</h1>
             <p className="text-xs text-muted-foreground">Salts and Oils</p>
           </div>
         </Link>
         
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" asChild>
+        <div className="flex items-center justify-between sm:justify-end gap-2">
+          <Button variant="ghost" asChild className="px-3">
             <Link to="/about">About</Link>
           </Button>
           {isAuthenticated ? (
-            <Button variant="ghost" onClick={onLogout}>
+            <Button variant="ghost" onClick={onLogout} className="px-3">
               Log out
             </Button>
           ) : (
-            <Button variant="ghost" asChild>
+            <Button variant="ghost" asChild className="px-3">
               <Link to="/login">Login</Link>
             </Button>
           )}
           <Button
             variant="outline"
-            className="relative gap-2"
+            className="relative gap-2 px-3"
             onClick={onOpenCart}
           >
             <ShoppingCart className="w-5 h-5" />

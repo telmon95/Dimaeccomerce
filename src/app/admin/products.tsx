@@ -70,7 +70,13 @@ export const ProductCreate = () => (
         </SimpleFormIterator>
       </ArrayInput>
       <TextInput source="image_url" fullWidth />
-      <ImageInput source="image_file" label="Upload Image" accept="image/*">
+      <ImageInput
+        source="image_file"
+        label="Upload Image"
+        accept="image/*"
+        fullWidth
+        helperText="Tap to upload on mobile or drag & drop on desktop."
+      >
         <ImageField source="src" title="title" />
       </ImageInput>
     </SimpleForm>
@@ -92,7 +98,13 @@ export const ProductEdit = () => (
         </SimpleFormIterator>
       </ArrayInput>
       <TextInput source="image_url" fullWidth />
-      <ImageInput source="image_file" label="Upload Image" accept="image/*">
+      <ImageInput
+        source="image_file"
+        label="Upload Image"
+        accept="image/*"
+        fullWidth
+        helperText="Tap to upload on mobile or drag & drop on desktop."
+      >
         <ImageField source="src" title="title" />
       </ImageInput>
     </SimpleForm>
