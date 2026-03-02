@@ -12,6 +12,8 @@ export interface Product {
   image: string;
   category: string;
   benefits: string[];
+  scentOptions?: string[];
+  sizeG?: number;
 }
 
 interface ProductCardProps {
@@ -21,24 +23,34 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onAddToCart, onViewDetails }: ProductCardProps) {
+  const priceLabel = product.scentOptions && product.scentOptions.length > 0
+    ? `From ${formatCurrency(product.price)}`
+    : formatCurrency(product.price);
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
       <div className="aspect-square overflow-hidden bg-gray-100" onClick={() => onViewDetails(product)}>
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-sm text-muted-foreground">
+            No image available
+          </div>
+        )}
       </div>
       <CardHeader onClick={() => onViewDetails(product)}>
         <div className="flex justify-between items-start mb-2">
           <Badge variant="secondary">{product.category}</Badge>
         </div>
-        <CardTitle className="text-xl">{product.name}</CardTitle>
-        <CardDescription className="line-clamp-2">{product.description}</CardDescription>
+        <CardTitle className="text-xl line-clamp-1">{product.name}</CardTitle>
+        <CardDescription className="line-clamp-2 min-h-[3.5rem]">{product.description}</CardDescription>
       </CardHeader>
       <CardFooter className="flex justify-between items-center">
-        <span className="text-2xl">{formatCurrency(product.price)}</span>
+        <span className="text-2xl">{priceLabel}</span>
         <Button onClick={() => onAddToCart(product)} className="gap-2">
           <ShoppingCart className="w-4 h-4" />
           Add to Cart

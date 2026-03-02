@@ -31,11 +31,17 @@ export function ProductDetail({ product, onClose, onAddToCart }: ProductDetailPr
         <div className="grid md:grid-cols-2 gap-8 p-6">
           {/* Image */}
           <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
+            {product.image ? (
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100 text-sm text-muted-foreground">
+                No image available
+              </div>
+            )}
           </div>
 
           {/* Details */}

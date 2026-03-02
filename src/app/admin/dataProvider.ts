@@ -80,4 +80,14 @@ export const dataProvider: DataProvider = {
     if (error) throw error;
     return { data };
   },
+
+  async deleteMany(resource, params) {
+    const { data, error } = await supabase
+      .from(resource)
+      .delete()
+      .in('id', params.ids)
+      .select('*');
+    if (error) throw error;
+    return { data: (data ?? []).map((row) => row.id) };
+  },
 } as DataProvider;

@@ -26,6 +26,8 @@ type SupabaseProduct = {
   image_url: string | null;
   category: string | null;
   benefits: string[] | null;
+  size_g?: number | null;
+  scent_options?: string[] | null;
   is_special: boolean | null;
   is_active: boolean | null;
 };
@@ -44,6 +46,8 @@ const mapProduct = (product: SupabaseProduct): Product => {
     image: product.image_url ?? '',
     category: product.category ?? 'General',
     benefits: product.benefits ?? [],
+    sizeG: product.size_g ?? undefined,
+    scentOptions: product.scent_options ?? undefined,
   };
 };
 
@@ -84,6 +88,18 @@ function Storefront({
   onCloseDetails,
   onCheckoutComplete,
 }: StorefrontProps) {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const categories = useMemo(() => {
+    const unique = Array.from(new Set(products.map((product) => product.category).filter(Boolean)));
+    return ['All', ...unique];
+  }, [products]);
+
+  const filteredProducts =
+    selectedCategory === 'All'
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#faf6f0] to-white">
       {/* Hero Section */}
@@ -93,6 +109,11 @@ function Storefront({
           <p className="text-base sm:text-xl md:text-2xl text-purple-100 max-w-2xl mx-auto">
             Discover our premium collection of handcrafted bath salts made with natural ingredients
           </p>
+          <div className="mt-6 flex justify-center">
+            <Button asChild className="bg-white text-primary hover:bg-white/90">
+              <a href="#collection">Shop Collection</a>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -125,22 +146,34 @@ function Storefront({
       </section>
 
       {/* Products Grid */}
-      <main className="container mx-auto px-4 py-12">
+      <main id="collection" className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl mb-2">Our Collection</h2>
           <p className="text-muted-foreground">Choose from our carefully curated selection</p>
+        </div>
+        <div className="flex flex-wrap gap-2 mb-8">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={category === selectedCategory ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </Button>
+          ))}
         </div>
         {isLoading ? (
           <div className="rounded-2xl border border-border bg-white/80 p-10 text-center text-muted-foreground">
             Loading products...
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="rounded-2xl border border-border bg-white/80 p-10 text-center text-muted-foreground">
-            Products are coming soon. Check back for new arrivals.
+            No products found in this category yet.
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -154,9 +187,24 @@ function Storefront({
 
       {/* Footer */}
       <footer className="bg-gray-100 border-t py-8 mt-12">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2026 Dimakatso. All natural ingredients, handcrafted with care.</p>
-          <p className="text-sm mt-2">Free shipping on orders over {formatCurrency(50)}</p>
+        <div className="container mx-auto px-4 grid gap-6 text-muted-foreground sm:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <p className="font-medium text-foreground">Dimakatso</p>
+            <p className="text-sm">All natural ingredients, handcrafted with care.</p>
+          </div>
+          <div>
+            <p className="font-medium text-foreground">Contact</p>
+            <p className="text-sm">Email: dimakatsosaltsandoils@gmail.com</p>
+            <p className="text-sm">WhatsApp: +27 76 711 9637</p>
+            <a
+              className="text-sm text-primary underline"
+              href="https://www.tiktok.com/@dimakatso_salts?_r=1&_t=ZS-94F6kg8DYHK"
+              target="_blank"
+              rel="noreferrer"
+            >
+              TikTok: @dimakatso_salts
+            </a>
+          </div>
         </div>
       </footer>
 

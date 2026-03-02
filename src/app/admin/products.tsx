@@ -11,6 +11,8 @@ import {
   List,
   NumberField,
   NumberInput,
+  SelectInput,
+  SelectArrayInput,
   SimpleForm,
   SimpleFormIterator,
   TextField,
@@ -48,6 +50,7 @@ export const ProductList = () => (
       <TextField source="name" />
       <TextField source="category" />
       <NumberField source="price" />
+      <NumberField source="size_g" label="Size (g)" />
       <BooleanField source="is_special" />
       <BooleanField source="is_active" />
       <EditButton />
@@ -61,7 +64,30 @@ export const ProductCreate = () => (
       <TextInput source="name" fullWidth />
       <TextInput source="description" fullWidth multiline />
       <NumberInput source="price" />
-      <TextInput source="category" />
+      <NumberInput source="size_g" label="Size (g)" />
+      <SelectInput
+        source="category"
+        choices={[
+          { id: 'Box Sets', name: 'Box Sets' },
+          { id: 'Bath Bombs', name: 'Bath Bombs' },
+          { id: 'Bath Salts', name: 'Bath Salts' },
+          { id: 'Gift Boxes', name: 'Gift Boxes' },
+          { id: 'Specials', name: 'Specials' },
+        ]}
+      />
+      <SelectArrayInput
+        source="scent_options"
+        label="Scent options"
+        choices={[
+          { id: 'Rose', name: 'Rose' },
+          { id: 'Lavender', name: 'Lavender' },
+          { id: 'Jasmine', name: 'Jasmine' },
+          { id: 'Ylang Ylang', name: 'Ylang Ylang' },
+          { id: 'Ocean', name: 'Ocean' },
+          { id: 'Mint', name: 'Mint' },
+          { id: 'Eucalyptus', name: 'Eucalyptus' },
+        ]}
+      />
       <BooleanInput source="is_special" />
       <BooleanInput source="is_active" defaultValue />
       <ArrayInput source="benefits">
@@ -89,7 +115,30 @@ export const ProductEdit = () => (
       <TextInput source="name" fullWidth />
       <TextInput source="description" fullWidth multiline />
       <NumberInput source="price" />
-      <TextInput source="category" />
+      <NumberInput source="size_g" label="Size (g)" />
+      <SelectInput
+        source="category"
+        choices={[
+          { id: 'Box Sets', name: 'Box Sets' },
+          { id: 'Bath Bombs', name: 'Bath Bombs' },
+          { id: 'Bath Salts', name: 'Bath Salts' },
+          { id: 'Gift Boxes', name: 'Gift Boxes' },
+          { id: 'Specials', name: 'Specials' },
+        ]}
+      />
+      <SelectArrayInput
+        source="scent_options"
+        label="Scent options"
+        choices={[
+          { id: 'Rose', name: 'Rose' },
+          { id: 'Lavender', name: 'Lavender' },
+          { id: 'Jasmine', name: 'Jasmine' },
+          { id: 'Ylang Ylang', name: 'Ylang Ylang' },
+          { id: 'Ocean', name: 'Ocean' },
+          { id: 'Mint', name: 'Mint' },
+          { id: 'Eucalyptus', name: 'Eucalyptus' },
+        ]}
+      />
       <BooleanInput source="is_special" />
       <BooleanInput source="is_active" />
       <ArrayInput source="benefits">
