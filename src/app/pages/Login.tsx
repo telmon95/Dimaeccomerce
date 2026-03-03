@@ -61,13 +61,7 @@ export default function Login() {
       .eq('id', userId)
       .single();
 
-    if (profileError) {
-      setError('Unable to verify admin access.');
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (profile?.role === 'admin') {
+    if (!profileError && profile?.role === 'admin') {
       navigate('/admin');
     } else {
       navigate('/');
