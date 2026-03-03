@@ -1,8 +1,10 @@
 import { ShoppingCart } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { formatCurrency } from '../lib/format';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 export interface Product {
   id: string;
@@ -18,11 +20,18 @@ export interface Product {
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (product: Product, selectedScent?: string) => void;
   onViewDetails: (product: Product) => void;
 }
 
 export function ProductCard({ product, onAddToCart, onViewDetails }: ProductCardProps) {
+  const [selectedScent, setSelectedScent] = useState<string | undefined>(
+    product.scentOptions?.[0]
+  );
+  const hasScentOptions = useMemo(
+    () => Boolean(product.scentOptions && product.scentOptions.length > 0),
+    [product.scentOptions]
+  );
   const priceLabel = product.scentOptions && product.scentOptions.length > 0
     ? `From ${formatCurrency(product.price)}`
     : formatCurrency(product.price);
@@ -49,12 +58,28 @@ export function ProductCard({ product, onAddToCart, onViewDetails }: ProductCard
         <CardTitle className="text-xl line-clamp-1">{product.name}</CardTitle>
         <CardDescription className="line-clamp-2 min-h-[3.5rem]">{product.description}</CardDescription>
       </CardHeader>
-      <CardFooter className="flex justify-between items-center">
+      <CardFooter className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <span className="text-2xl">{priceLabel}</span>
-        <Button onClick={() => onAddToCart(product)} className="gap-2">
-          <ShoppingCart className="w-4 h-4" />
-          Add to Cart
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          {hasScentOptions && (
+            <Select value={selectedScent} onValueChange={setSelectedScent}>
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="Select scent" />
+              </SelectTrigger>
+              <SelectContent>
+                {product.scentOptions?.map((scent) => (
+                  <SelectItem key={scent} value={scent}>
+                    {scent}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          <Button onClick={() => onAddToCart(product, selectedScent)} className="gap-2">
+            <ShoppingCart className="w-4 h-4" />
+            Add to Cart
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

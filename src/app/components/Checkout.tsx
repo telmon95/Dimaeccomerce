@@ -52,6 +52,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
         id: item.product.id,
         name: item.product.name,
         price: item.product.price,
+        scent: item.selectedScent ?? null,
         quantity: item.quantity,
       })),
       subtotal: total,
@@ -247,6 +248,11 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
                   <div className="flex-1 min-w-0">
                     <p className="truncate">{item.product.name}</p>
                     <p className="text-sm mt-1">{formatCurrency(item.product.price * item.quantity)}</p>
+                    {item.selectedScent && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Scent: {item.selectedScent}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}

@@ -424,17 +424,22 @@ export default function App() {
     };
   }, []);
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: Product, selectedScent?: string) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.product.id === product.id);
+      const existingItem = prevCart.find(
+        (item) =>
+          item.product.id === product.id &&
+          (item.selectedScent ?? null) === (selectedScent ?? null)
+      );
       if (existingItem) {
         return prevCart.map((item) =>
-          item.product.id === product.id
+          item.product.id === product.id &&
+          (item.selectedScent ?? null) === (selectedScent ?? null)
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prevCart, { product, quantity: 1 }];
+      return [...prevCart, { product, quantity: 1, selectedScent }];
     });
     toast.success(`${product.name} added to cart!`);
   };

@@ -159,7 +159,7 @@ values
     false,
     true,
     null,
-    null
+    ARRAY['Rose','Lavender','Jasmine','Ylang Ylang','Ocean','Mint','Eucalyptus']::text[]
   ),
   (
     'Box Set 1x250g + Bath Bomb + Spoon',
@@ -171,7 +171,7 @@ values
     false,
     true,
     null,
-    null
+    ARRAY['Rose','Lavender','Jasmine','Ylang Ylang','Ocean','Mint','Eucalyptus']::text[]
   ),
   (
     'Box Set 1x500g + Bath Bomb + Spoon',
@@ -183,5 +183,5 @@ values
     false,
     true,
     null,
-    null
+    ARRAY['Rose','Lavender','Jasmine','Ylang Ylang','Ocean','Mint','Eucalyptus']::text[]
   );

@@ -54,6 +54,19 @@ export function ProductDetail({ product, onClose, onAddToCart }: ProductDetailPr
               <p className="text-muted-foreground leading-relaxed">{product.description}</p>
             </div>
 
+            {product.scentOptions && product.scentOptions.length > 0 && (
+              <div>
+                <h3 className="text-lg mb-3">Available Scents</h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.scentOptions.map((scent) => (
+                    <Badge key={scent} variant="outline">
+                      {scent}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div>
               <h3 className="text-lg mb-3">Benefits</h3>
               <ul className="space-y-2">

@@ -7,6 +7,7 @@ import { formatCurrency } from '../lib/format';
 export interface CartItem {
   product: Product;
   quantity: number;
+  selectedScent?: string;
 }
 
 interface CartDrawerProps {
@@ -71,6 +72,11 @@ export function CartDrawer({
                   <div className="flex-1 min-w-0">
                     <h3 className="truncate">{item.product.name}</h3>
                     <p className="mt-1">{formatCurrency(item.product.price)}</p>
+                    {item.selectedScent && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Scent: {item.selectedScent}
+                      </p>
+                    )}
                     
                     <div className="flex items-center gap-2 mt-2">
                       <Button
