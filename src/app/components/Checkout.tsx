@@ -40,7 +40,9 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
     setIsSubmitting(true);
 
     const { data: userData } = await supabase.auth.getUser();
-    const orderPayload = {
+    const orderId = crypto.randomUUID();
+    const orderPayloads = items.map((item) => ({
+      order_id: orderId,
       user_id: userData.user?.id ?? null,
       customer_name: `${formData.firstName} ${formData.lastName}`.trim(),
       email: formData.email,
@@ -48,20 +50,27 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
       city: formData.city,
       state: formData.state,
       zip: formData.zip,
-      items: items.map((item) => ({
-        id: item.product.id,
-        name: item.product.name,
-        price: item.product.price,
-        scent: item.selectedScent ?? null,
-        quantity: item.quantity,
-      })),
+      product_id: item.product.id,
+      quantity: item.quantity,
+      total_price: item.product.price * item.quantity,
+      order_status: 'submitted',
+      payment_status: 'paid',
+      items: [
+        {
+          id: item.product.id,
+          name: item.product.name,
+          price: item.product.price,
+          scent: item.selectedScent ?? null,
+          quantity: item.quantity,
+        },
+      ],
       subtotal: total,
       shipping,
       total: grandTotal,
       status: 'paid',
-    };
+    }));
 
-    const { error } = await supabase.from('orders').insert(orderPayload);
+    const { error } = await supabase.from('orders').insert(orderPayloads);
     if (error) {
       console.error(error);
       toast.error('Checkout failed. Please try again.');

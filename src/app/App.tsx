@@ -14,6 +14,10 @@ import { supabase } from './lib/supabaseClient';
 import AdminApp from './admin/AdminApp';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Account from './pages/Account';
+import TermsConditions from './pages/TermsConditions';
+import PopiaNotice from './pages/PopiaNotice';
 
 const logo = new URL('../assets/logo.jpeg', import.meta.url).toString();
 const aboutImage = new URL('../assets/about.jpeg', import.meta.url).toString();
@@ -205,6 +209,20 @@ function Storefront({
               TikTok: @dimakatso_salts
             </a>
           </div>
+          <div>
+            <p className="font-medium text-foreground">Privacy</p>
+            <div className="flex flex-col gap-1">
+              <Link className="text-sm text-primary underline" to="/privacy">
+                Privacy Policy
+              </Link>
+              <Link className="text-sm text-primary underline" to="/terms">
+                Terms & Conditions
+              </Link>
+              <Link className="text-sm text-primary underline" to="/popia">
+                POPIA Compliance Notice
+              </Link>
+            </div>
+          </div>
         </div>
       </footer>
 
@@ -318,9 +336,14 @@ function SiteHeader({ cartItemCount, onOpenCart, isAuthenticated, onLogout }: Si
             <Link to="/about">About</Link>
           </Button>
           {isAuthenticated ? (
-            <Button variant="ghost" onClick={onLogout} className="px-3">
-              Log out
-            </Button>
+            <>
+              <Button variant="ghost" asChild className="px-3">
+                <Link to="/account">Account</Link>
+              </Button>
+              <Button variant="ghost" onClick={onLogout} className="px-3">
+                Log out
+              </Button>
+            </>
           ) : (
             <Button variant="ghost" asChild className="px-3">
               <Link to="/login">Login</Link>
@@ -529,7 +552,7 @@ export default function App() {
             <Button asChild>
               <Link to="/login">Go to login</Link>
             </Button>
-          </div>
+        </div>
         </div>
       );
     }
@@ -575,6 +598,10 @@ export default function App() {
         />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsConditions />} />
+        <Route path="/popia" element={<PopiaNotice />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/admin/*"
