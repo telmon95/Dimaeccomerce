@@ -25,9 +25,6 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
     city: '',
     state: '',
     zip: '',
-    cardNumber: '',
-    expiry: '',
-    cvv: '',
   });
 
   const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
@@ -192,43 +189,10 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
             </div>
 
             <div>
-              <h3 className="text-lg mb-4">Payment Information</h3>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="cardNumber">Card Number</Label>
-                  <Input
-                    id="cardNumber"
-                    name="cardNumber"
-                    required
-                    value={formData.cardNumber}
-                    onChange={handleChange}
-                    placeholder="1234 5678 9012 3456"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="expiry">Expiry</Label>
-                    <Input
-                      id="expiry"
-                      name="expiry"
-                      required
-                      value={formData.expiry}
-                      onChange={handleChange}
-                      placeholder="MM/YY"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="cvv">CVV</Label>
-                    <Input
-                      id="cvv"
-                      name="cvv"
-                      required
-                      value={formData.cvv}
-                      onChange={handleChange}
-                      placeholder="123"
-                    />
-                  </div>
-                </div>
+              <h3 className="text-lg mb-4">Payment</h3>
+              <div className="rounded-2xl border border-border bg-white/80 p-4 text-sm text-muted-foreground">
+                Payments are confirmed via direct arrangement. We will contact you after checkout to
+                complete payment.
               </div>
             </div>
 
