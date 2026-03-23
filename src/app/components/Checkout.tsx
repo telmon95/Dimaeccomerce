@@ -30,6 +30,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
   const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const shipping = 5.99;
   const grandTotal = total + shipping;
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,8 +51,8 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
       product_id: item.product.id,
       quantity: item.quantity,
       total_price: item.product.price * item.quantity,
-      order_status: 'submitted',
-      payment_status: 'paid',
+      order_status: 'new',
+      payment_status: 'pending',
       items: [
         {
           id: item.product.id,
@@ -64,7 +65,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
       subtotal: total,
       shipping,
       total: grandTotal,
-      status: 'paid',
+      status: 'pending',
     }));
 
     const { error } = await supabase.from('orders').insert(orderPayloads);
@@ -75,9 +76,56 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
       return;
     }
 
-    toast.success('Order placed successfully!');
-    onComplete();
-    setIsSubmitting(false);
+    if (!supabaseUrl) {
+      toast.error('Payment setup is missing. Please contact support.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const functionsUrl = supabaseUrl.replace('.supabase.co', '.functions.supabase.co');
+
+    try {
+      const response = await fetch(`${functionsUrl}/create-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount: grandTotal,
+          orderId,
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          itemName: `Order ${orderId}`,
+          returnUrl: `${window.location.origin}/`,
+          cancelUrl: `${window.location.origin}/`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create payment');
+      }
+
+      const { url, data } = await response.json();
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = url;
+
+      Object.entries(data).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = String(value);
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error(err);
+      toast.error('Unable to start payment. Please try again.');
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,8 +239,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
             <div>
               <h3 className="text-lg mb-4">Payment</h3>
               <div className="rounded-2xl border border-border bg-white/80 p-4 text-sm text-muted-foreground">
-                Payments are confirmed via direct arrangement. We will contact you after checkout to
-                complete payment.
+                You will be redirected to PayFast to complete payment securely.
               </div>
             </div>
 

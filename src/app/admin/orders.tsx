@@ -32,8 +32,17 @@ export const OrderList = () => (
       <TextField source="product_id" />
       <NumberField source="quantity" />
       <NumberField source="total_price" />
+      <NumberField source="subtotal" />
+      <NumberField source="shipping" />
+      <NumberField source="total" />
+      <TextField source="m_payment_id" label="Merchant Ref" />
+      <TextField source="pf_payment_id" label="PayFast ID" />
+      <NumberField source="amount_gross" />
+      <NumberField source="pf_fee_amount" />
+      <TextField source="payment_date" />
       <TextField source="order_status" />
       <TextField source="payment_status" />
+      <TextField source="status" />
       <FunctionField
         label="Items"
         render={(record) => formatItems(record.items)}
@@ -53,6 +62,15 @@ export const OrderEdit = () => (
       <TextField source="product_id" />
       <NumberField source="quantity" />
       <NumberField source="total_price" />
+      <NumberField source="subtotal" />
+      <NumberField source="shipping" />
+      <NumberField source="total" />
+      <TextField source="m_payment_id" label="Merchant Ref" />
+      <TextField source="pf_payment_id" label="PayFast ID" />
+      <NumberField source="amount_gross" />
+      <NumberField source="pf_fee_amount" />
+      <TextField source="payment_date" />
+      <TextField source="status" />
       <SelectInput
         source="order_status"
         choices={[
