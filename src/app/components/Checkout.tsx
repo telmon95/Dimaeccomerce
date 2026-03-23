@@ -31,6 +31,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
   const shipping = 5.99;
   const grandTotal = total + shipping;
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +77,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
       return;
     }
 
-    if (!supabaseUrl) {
+    if (!supabaseUrl || !supabaseAnonKey) {
       toast.error('Payment setup is missing. Please contact support.');
       setIsSubmitting(false);
       return;
@@ -85,10 +86,21 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
     const functionsUrl = supabaseUrl.replace('.supabase.co', '.functions.supabase.co');
 
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
+
+      if (!accessToken) {
+        toast.error('Please log in again to continue.');
+        setIsSubmitting(false);
+        return;
+      }
+
       const response = await fetch(`${functionsUrl}/create-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          apikey: supabaseAnonKey,
         },
         body: JSON.stringify({
           amount: grandTotal,
