@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Eye, EyeOff } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -13,6 +14,26 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [resetNotice, setResetNotice] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleGoogleAuth = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError(null);
+    setResetNotice(null);
+
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
+    });
+
+    if (oauthError) {
+      setError(oauthError.message);
+      setIsSubmitting(false);
+    }
+  };
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -111,13 +132,24 @@ export default function Login() {
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                className="pr-12"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
           {resetNotice && <p className="text-sm text-muted-foreground">{resetNotice}</p>}
@@ -131,6 +163,14 @@ export default function Login() {
               : 'Login'}
           </Button>
         </form>
+        <div className="my-4 flex items-center gap-3 text-xs uppercase text-muted-foreground">
+          <span className="h-px flex-1 bg-border" />
+          or
+          <span className="h-px flex-1 bg-border" />
+        </div>
+        <Button type="button" variant="outline" className="w-full" onClick={handleGoogleAuth}>
+          Continue with Google
+        </Button>
         <div className="mt-4 text-sm text-muted-foreground text-center">
           {mode === 'signup' ? 'Already have an account?' : "Don't have an account?"}{' '}
           <button
