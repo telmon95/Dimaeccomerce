@@ -28,7 +28,7 @@ export function Checkout({ items, onClose, onComplete }: CheckoutProps) {
   });
 
   const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const shipping = 5.99;
+  const shipping = 60;
   const grandTotal = total + shipping;
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
